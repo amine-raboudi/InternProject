@@ -1,0 +1,9 @@
+# config/packages/easy_admin.yaml
+easy_admin:
+    entities:
+        Agent:
+            new:
+                fields:
+                  - { property: 'IsVerified', type: 'toggle' }            
+                          # ...
+    # ...

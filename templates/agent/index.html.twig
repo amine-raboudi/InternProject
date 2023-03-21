@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subscribe!{% endblock %}
+
+{% block body %}
+{% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+
+
+    
+    <div class="row"style=" border-radius: 10px ;background-color: rgb(245, 247, 248); margin-top: 50px;margin-left: 150px;margin-right:150px;margin-bottom: 50px;box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;">
+        <div class="col-sm" style="margin-top: 20px;margin-left:20px;margin-bottom:20px;border: 1px solid gray; border-radius: 5px">
+            <div style="margin-top: 20px;">
+                <h1 class="h3 mb-3 font-weight-normal" style="margin-top: 30px;">Please Sign Up</h1>
+                {{ form_start(form) }}
+            
+                {{ form_row(form.email) }}
+            
+                {{ form_row(form.plainPassword, {
+                label: 'Password'
+                }) }}
+               
+                
+                {{ form_row(form.agreeTerms) }}
+
+
+                
+                
+    
+                <button type="submit" class="btn btn-primary"style="margin-top: 10px;margin-left:150px;margin-bottom:20px;">Register</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="col-sm" >
+            <div style="margin-top: 50px;">
+                <img src="{{ asset('inscri.png') }} "width="100%"style="margin-top: 100px;"">                  
+            </div>
+        </div>
+      </div>
+
+
+    
+{% endblock %}

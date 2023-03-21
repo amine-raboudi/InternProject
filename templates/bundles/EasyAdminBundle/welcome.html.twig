@@ -1,0 +1,46 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+
+{% block main %}
+
+</div>
+<div class="container">
+    <div class="row">
+        <h1> Dashboard</h1>
+        
+    </div>
+    <div class="row mt-3">
+        
+        
+        <div class="col-6 alert-dark">
+            <span class="display-3"> {{ countAdmin['value'] + countClient['value']+ countAgent['value']+CountSupUser['value']}} </span> Users
+        </div>
+        <div class="col-6 alert-success">
+            <span class="display-3"> {{ CountSupUser['value'] }} </span> SUPER  ADMIN
+        </div>
+        
+        
+    </div>
+    <div class="row mt-3">
+        
+        <div class="col-6 alert-info">
+            <span class="display-3"> {{ countClient['value'] }} </span> Clients
+        </div>
+        <div class="col-6 alert-warning">
+            <span class="display-3"> {{ countAgent['value'] }} </span> Agencies
+        </div>
+        
+        
+    </div>
+    <div class="row mt-3">
+        
+        
+        <div class="col-6 alert-danger">
+            <span class="display-3"> {{ countAdmin['value'] }} </span> Admins
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
