@@ -63,7 +63,8 @@ public function __construct(ClientRepository $ClientRepository,AgentRepository $
             'countClient' => $this->ClientRepository->countAllClient(),
             'countAgent'=>$this->agentRepository->countAllAgent(),
             'countAdmin'=>$this->adminRepository->countAllAdmin(),
-            'CountSupUser'=>$this->userRepository->countAllSupAdmin('["ROLE_SUPER_ADMIN"]')
+            'CountSupUser'=>$this->userRepository->countAllSupAdmin('["ROLE_SUPER_ADMIN"]'),
+           
 
         ]);
     }

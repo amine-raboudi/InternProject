@@ -1,20 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdminController!{% endblock %}
 
+
+
+
+{% block title %}Admin{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="row">
+  <div class="col-sm-2">
+    <div class="shadow-lg p-3 mb-5 bg-white rounded"style="padding: 20px;width: 300px;">
+      <img src="https://st2.depositphotos.com/1002277/10073/i/950/depositphotos_100732302-stock-photo-word-admin-on-wood-planks.jpg"  style="border-radius: 50%; width: 200px;margin-left:25px" >
+      <hr style=" border-top: 1px dashed;">
+     <p style="text-align:center"><b>{{admin.email}}</b></p>
+     <hr style=" border-top: 1px dashed;">
+     
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/ASUS/InternProject/src/Controller/AdminController.php'|file_link(0) }}">src/Controller/AdminController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/ASUS/InternProject/templates/admin/index.html.twig'|file_link(0) }}">templates/admin/index.html.twig</a></code></li>
+
+     <ul class="list-group">
+      <li class="list-group-item"><p style="text-align:center"><i  class="fa fa-user"></i>  Gestion des utilisateurs</p></li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+      <li class="list-group-item">A fourth item</li>
+      <li class="list-group-item">And a fifth one</li>
     </ul>
+    </div>
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="col-sm-8">
+    <div class="shadow-lg p-3 mb-5 bg-white rounded"style="margin-left:70px;width: 1080px;">
+     <div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <button type="button" class="btn btn-outline-warning">
+        <i class="fa fa-calendar"></i>
+        {{ "now"|date("d/m/Y -- h:i") }} 
+      </button> 
+    </div>
+    <div class="col-sm">
+    </div>
+    <div class="col-sm">
+    </div>
+    <div class="col-sm">
+      <div class="btn-group">
+        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" >
+          {{admin.email}}
+        </button>
+        
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Separated link</a></li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
 </div>
+         
+          
+      
+      
+     
+  
+  </div>
+</div>
+</div>
+
+
+  
+
 {% endblock %}

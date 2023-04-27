@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Client;
+use App\Entity\Agent;
 use App\Form\AgentType;
 use App\Entity\User;
 use App\Repository\ClientRepository;
@@ -28,6 +28,43 @@ class RegistrationController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
     }
+
+    /**
+     * @Route("/register/agent", name="app_agent_register")
+     */
+    public function agent(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+       
+            $Agent = new Agent();
+            $form = $this->createForm(AgentType::class, $Agent);
+            $form->handleRequest($request);
+            
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                // encode the plain password
+                $Agent->setPassword(
+                    $userPasswordHasher->hashPassword(
+                            $Agent,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
+                $Agent->setRoles(['ROLE_AGENT']);
+                $Agent->setStatus('Waiting');
+                $entityManager->persist($Agent);
+
+                
+                
+                $entityManager->flush();
+
+
+    
+                return $this->redirectToRoute('app_check');
+            }
+    
+            return $this->render('agent/index.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
 
     /**
      * @Route("register/client", name="app_client_register")

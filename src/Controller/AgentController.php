@@ -20,51 +20,112 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AgentController extends AbstractController
 {
-   /**
-     * @Route("/register/agent", name="app_agent_register")
+   
+    /**
+     * @Route("/agence/{id}", name="agence_show", methods={"GET"})
      */
-    public function agent(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function show(int $id): Response
     {
-       
-            $Agent = new Agent();
-            $form = $this->createForm(AgentType::class, $Agent);
-            $form->handleRequest($request);
-            
-    
-            if ($form->isSubmitted() && $form->isValid()) {
-                // encode the plain password
-                $Agent->setPassword(
-                    $userPasswordHasher->hashPassword(
-                            $user,
-                            $form->get('plainPassword')->getData()
-                        )
-                    );
-                $Agent->setRoles(['ROLE_AGENT']);
-                $Agent->setStatus('Waiting');
-                $entityManager->persist($Agent);
-
-                
-                
-                $entityManager->flush();
-
-
-    
-                return $this->redirectToRoute('app_check');
-            }
-    
-            return $this->render('agent/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
+        $agence =$this->getDoctrine()->getRepository(Agent::class)->find($id);
+  
+        if (!$agence) {
+  
+            return $this->json('No agence found for id' . $id, 404);
         }
-        /**
-     * @Route("/agence/management", name="app_agence_management")
-     */
-    public function index(): Response
-    {
-        return $this->render('agence_management/index.html.twig', [
-            'controller_name' => 'AgenceManagementController',
-        ]);
+  
+         $res[]=[
+                'id'=>$agence->getId(),
+                'email'=>$agence->getEmail(),
+                'roles'=>$agence->getRoles(),
+                'password'=>$agence->getPassword(),
+                'status'=>$agence->getStatus()
+                ];
+          
+        return $this->json($res);
     }
+      /**
+     * @Route("/agence/post", name="agence_post", methods={"POST"})
+     */
+    public function post(Request $request): Response
+    {
+        $agent=new Agent;
+        $param=json_decode($request->getContent(),true );
+        $agent->setEmail($param['email']);
+        $agent->setRoles($param['roles']);
+        $agent->setPassword($param['password']);
+        $agent->setStatus($param['status']);
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($agent);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+
+     /**
+     * @Route("/agence/update/{id}", name="agence_update", methods={"PUT"})
+     */
+    public function update(Request $request,$id): Response
+    {
+        $agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
+        $param=json_decode($request->getContent(),true );
+        $agent->setEmail($param['email']);
+        $agent->setRoles($param['roles']);
+        $agent->setPassword($param['password']);
+        $agent->setStatus($param['status']);
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($agent);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+    /**
+     * @Route("/agence/delete/{id}", name="agence_delete", methods={"DELETE"})
+     */
+    public function delete($id): Response
+    {
+        $agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
+        
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->remove($agent);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+
+     /**
+     * @Route("/agence", name="agence_list", methods={"GET"})
+     */
+    public function list(): Response
+    {
+        $agent=$this->getDoctrine()->getRepository(Agent::class)->findAll();
+        foreach($agent  as  $d)
+        {
+            $res[]=[
+                'id'=>$d->getId(),
+                'email'=>$d->getEmail(),
+                'roles'=>$d->getRoles(),
+                'password'=>$d->getPassword(),
+                'status'=>$d->getStatus()
+                ];
+        }
+
+        
+       
+        return $this->json(
+            $res
+        );
+    }
+
+
     
     }
 

@@ -17,10 +17,46 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Repository\ClientRepository;
+use App\Repository\AgentRepository;
+use App\Repository\AdminRepository;
+use App\Repository\UserRepository;
 
 
 class AdminController extends AbstractController
 {
+   /**
+     * @var ClientRepository
+     */
+    protected  $ClientRepository;
+
+     /**
+     * @var AgentRepository
+     */
+    protected  $agentRepository;
+    
+     /**
+     * @var AdminRepository
+     */
+    protected  $adminRepository;
+
+    /**
+     * @var UserRepository
+     */
+    protected  $userRepository;
+    
+
+public function __construct(ClientRepository $ClientRepository,AgentRepository $agentRepository,AdminRepository $adminRepository,UserRepository $userRepository){
+    $this->ClientRepository=$ClientRepository;
+    $this->agentRepository=$agentRepository;
+    $this->adminRepository=$adminRepository;
+    $this->userRepository=$userRepository;
+
+    
+
+}
+
+
     /**
      * @Route("/register/admin", name="app_admin_register")
      */
@@ -59,13 +95,13 @@ class AdminController extends AbstractController
             ]);
         }
 
-         /**
-     * @Route("/admin/management", name="app_admin_management")
+    /**
+     * @Route("/admin/management/{id}", name="app_admin_management")
      */
-    public function index(): Response
+    public function index($id): Response
     {
         return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
+            'admin' => $this->userRepository->find($id),
         ]);
     }
     
