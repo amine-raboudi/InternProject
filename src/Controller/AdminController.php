@@ -21,6 +21,7 @@ use App\Repository\ClientRepository;
 use App\Repository\AgentRepository;
 use App\Repository\AdminRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class AdminController extends AbstractController
@@ -96,13 +97,11 @@ public function __construct(ClientRepository $ClientRepository,AgentRepository $
         }
 
     /**
-     * @Route("/admin/management/{id}", name="app_admin_management")
+     * @Route("/admin/management/", name="app_admin_management")
      */
-    public function index($id): Response
+    public function index(): Response
     {
-        return $this->render('admin/index.html.twig', [
-            'admin' => $this->userRepository->find($id),
-        ]);
+        return new RedirectResponse('http://127.0.0.1:4200/admin');
     }
     
     
