@@ -102,7 +102,7 @@ class AgentController extends AbstractController
     }
 
      /**
-     * @Route("/agence", name="agence_list", methods={"GET"})
+     * @Route("/agenceAll", name="agence_list", methods={"GET"})
      */
     public function list(): Response
     {
