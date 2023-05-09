@@ -38,7 +38,10 @@ security:
                 - App\Security\AuthAuthenticator
             logout:
                 path: app_logout
-    
+        api:
+            pattern: ^/api
+            stateless: true
+            
         
         
               # where to redirect after logout
@@ -54,7 +57,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         #- { path: ^/super/admin, roles: ROLE_SUPER_ADMIN }
-        - { path: ^/admin/management, roles: ROLE_ADMIN }
+        #- { path: ^/admin/management, roles: ROLE_ADMIN }
         #- { path: ^/client, roles: ROLE_CLIENT }
         #- { path: ^/agence/management, roles: ROLE_AGENT }
 

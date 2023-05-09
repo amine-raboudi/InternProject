@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AuthAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -22,11 +23,15 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private $urlGenerator;
+   
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
+       
+        
     }
+    
 
     public function authenticate(Request $request): Passport
     {
@@ -58,4 +63,5 @@ class AuthAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+    
 }
