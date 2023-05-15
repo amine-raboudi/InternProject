@@ -35,11 +35,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $IsVerified;
-
+   
     
     
 
@@ -132,17 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function isIsVerified(): ?bool
-    {
-        return $this->IsVerified;
-    }
-
-    public function setIsVerified(?bool $IsVerified): self
-    {
-        $this->IsVerified = $IsVerified;
-
-        return $this;
-    }
+  
 
  
    

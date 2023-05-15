@@ -3,7 +3,9 @@
 namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Agent;
+use App\Entity\Admin;
 use App\Form\AgentType;
+use App\Form\AdminType;
 use App\Entity\User;
 use App\Repository\ClientRepository;
 use App\Form\RegistrationFormType;
@@ -51,9 +53,7 @@ class RegistrationController extends AbstractController
                 $Agent->setRoles(['ROLE_AGENT']);
                 $Agent->setStatus('Waiting');
                 $entityManager->persist($Agent);
-
-                
-                
+            
                 $entityManager->flush();
 
 
@@ -90,7 +90,7 @@ class RegistrationController extends AbstractController
             $client->setIsVerified(false);
             $entityManager->persist($client);
 
-            $user->setIsVerified(false);
+            
             $user->setEmail($client->getEmail());
             $user->setPassword($client->getPassword());
             $user->setRoles($client->getRoles());
@@ -141,6 +141,48 @@ class RegistrationController extends AbstractController
     
 
 
+    /**
+     * @Route("/register/admin", name="app_admin_register")
+     */
+    public function Admin(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    {
+       
+            $admin = new Admin();
+            $user=new User();
+            $form = $this->createForm(AdminType::class, $admin);
+            $form->handleRequest($request);
+            
+    
+            if ($form->isSubmitted() && $form->isValid()) {
+                // encode the plain password
+                $admin->setPassword(
+                    $userPasswordHasher->hashPassword(
+                            $admin,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
+                $admin->setRoles(['ROLE_ADMIN']);
+                $admin->setStatus('Waiting');
+
+                $user->setEmail($admin->getEmail());
+                $user->setRoles($admin->getRoles());
+                $user->setPassword($admin->getPassword());
+
+                $entityManager->persist($admin);
+
+               
+                
+                $entityManager->flush();
+
+
+    
+                return $this->redirectToRoute('app_check');
+            }
+    
+            return $this->render('agent/index.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        }
 
     
     

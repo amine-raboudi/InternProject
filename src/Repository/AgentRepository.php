@@ -81,7 +81,15 @@ class AgentRepository extends ServiceEntityRepository implements PasswordUpgrade
 //            ->getResult()
 //        ;
 //    }
-
+public function findOneByMail($email): ?Agent
+   {
+       return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :val')
+            ->setParameter('val', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 //    public function findOneBySomeField($value): ?Agent
 //    {
 //        return $this->createQueryBuilder('a')

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Admin;
+use App\Entity\NewAdmin;
 use App\Form\AdminType;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
@@ -26,75 +27,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AdminController extends AbstractController
 {
-   /**
-     * @var ClientRepository
-     */
-    protected  $ClientRepository;
+   
 
-     /**
-     * @var AgentRepository
-     */
-    protected  $agentRepository;
-    
-     /**
-     * @var AdminRepository
-     */
-    protected  $adminRepository;
-
-    /**
-     * @var UserRepository
-     */
-    protected  $userRepository;
-    
-
-public function __construct(ClientRepository $ClientRepository,AgentRepository $agentRepository,AdminRepository $adminRepository,UserRepository $userRepository){
-    $this->ClientRepository=$ClientRepository;
-    $this->agentRepository=$agentRepository;
-    $this->adminRepository=$adminRepository;
-    $this->userRepository=$userRepository;
-
-    
+public function __construct(){
 
 }
-
-
-    /**
-     * @Route("/register/admin", name="app_admin_register")
-     */
-    public function Admin(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
-    {
-       
-            $admin = new Admin();
-            $form = $this->createForm(AdminType::class, $admin);
-            $form->handleRequest($request);
-            
     
-            if ($form->isSubmitted() && $form->isValid()) {
-                // encode the plain password
-                $admin->setPassword(
-                    $userPasswordHasher->hashPassword(
-                            $admin,
-                            $form->get('plainPassword')->getData()
-                        )
-                    );
-                $admin->setRoles(['ROLE_ADMIN']);
-                $admin->setStatus('Waiting');
-
-                $entityManager->persist($admin);
-
-               
-                
-                $entityManager->flush();
 
 
-    
-                return $this->redirectToRoute('app_check');
-            }
-    
-            return $this->render('agent/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
-        }
+
+
 
     /**
      * @Route("/admin/management/", name="app_admin_management")
@@ -102,6 +44,191 @@ public function __construct(ClientRepository $ClientRepository,AgentRepository $
     public function index(): Response
     {
         return new RedirectResponse('http://127.0.0.1:4200/admin');
+    }
+    /**
+     * @Route("/admin/{id}", name="admin_show", methods={"GET"})
+     */
+    public function show(int $id): Response
+    {
+        $admin =$this->getDoctrine()->getRepository(Admin::class)->find($id);
+  
+        if (!$admin) {
+  
+            return $this->json('No agence found for id' . $id, 404);
+        }
+  
+         $res[]=[
+                'id'=>$admin->getId(),
+                'email'=>$admin->getEmail(),
+                'roles'=>$admin->getRoles(),
+                'password'=>$admin->getPassword(),
+                'status'=>$admin->getStatus()
+                ];
+          
+        return $this->json($res);
+    }
+      /**
+     * @Route("/newAdmin/post", name="admin_post", methods={"POST"})
+     */
+    public function post(Request $request): Response
+    {
+        $admin=new NewAdmin;
+        $param=json_decode($request->getContent(),true );
+        $admin->setEmail($param['email']);
+        $admin->setMailSended($param['MailSended']);
+        
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($admin);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+    
+
+     /**
+     * @Route("/admin/update/{id}", name="admin_update", methods={"PUT"})
+     */
+    public function update(Request $request,$id): Response
+    {
+        $admin=$this->getDoctrine()->getRepository(Admin::class)->find($id);
+        $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($admin->getEmail());
+        $param=json_decode($request->getContent(),true );
+        $admin->setEmail($param['email']);
+        $admin->setRoles($param['roles']);
+        $admin->setPassword($param['password']);
+        $admin->setStatus($param['status']);
+        if( $user==null){
+            $user=new  User();
+            if(($param['status']=='Accepted')){
+                $user->setEmail($param['email']);
+                $user->setRoles($param['roles']);
+                $user->setPassword($param['password']);
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+    
+    
+            }
+            
+        }else{
+            $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($admin->getEmail());
+            if(($param['status']=='Accepted')){
+                $user->setEmail($param['email']);
+                $user->setRoles($param['roles']);
+                $user->setPassword($param['password']);
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+    
+    
+            }else{
+                if(($param['status']=='Denied')){
+            $entityManager=$this->getDoctrine()->getManager();
+
+            $entityManager->remove($user);
+                }
+            };
+            
+            $entityManager=$this->getDoctrine()->getManager();
+
+            $entityManager->remove($user);
+
+
+        }
+       
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($admin);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+    /**
+     * @Route("/admin/delete/{id}", name="admin_delete", methods={"DELETE"})
+     */
+    public function delete($id): Response
+    {
+    $admin=$this->getDoctrine()->getRepository(Admin::class)->find($id);
+    $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($admin->getEmail());
+
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->remove($admin);
+        $entityManager->remove($user);
+
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
+    }
+
+     /**
+     * @Route("/adminAll", name="admin_list", methods={"GET"})
+     */
+    public function list(): Response
+    {
+        $admin=$this->getDoctrine()->getRepository(Admin::class)->findAll();
+        foreach($admin  as  $d)
+        {
+            $res[]=[
+                'id'=>$d->getId(),
+                'email'=>$d->getEmail(),
+                'roles'=>$d->getRoles(),
+                'password'=>$d->getPassword(),
+                'status'=>$d->getStatus()
+                ];
+        }
+
+        
+       
+        return $this->json(
+            $res
+        );
+    }
+ /**
+     * @Route("/newAdmin", name="newAdmin", methods={"GET"})
+     */
+    public function newAdmin(): Response
+    {
+        $admin=$this->getDoctrine()->getRepository(NewAdmin::class)->findAll();
+        foreach($admin  as  $d)
+        {
+            $res[]=[
+                'id'=>$d->getId(),
+                'email'=>$d->getEmail(),
+                'MailSended'=>$d->isMailSended(),
+                
+                ];
+        }
+
+        
+       
+        return $this->json(
+            $res
+        );
+    }
+
+/**
+     * @Route("/newAdmin/update/{id}", name="newAdmin_update", methods={"PUT"})
+     */
+    public function updateNew(Request $request,$id): Response
+    {
+        $admin=$this->getDoctrine()->getRepository(NewAdmin::class)->find($id);
+        $param=json_decode($request->getContent(),true );
+        $admin->setEmail($param['email']);
+        $admin->setMailSended($param['MailSended']);
+
+
+        $entityManager=$this->getDoctrine()->getManager();
+        $entityManager->persist($admin);
+        $entityManager->flush();
+
+        return $this->json(
+            'OK!!!!!'
+        );
     }
     
     

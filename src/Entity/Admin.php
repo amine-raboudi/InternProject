@@ -27,7 +27,7 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private $roles ;
 
     /**
      * @var string The hashed password
@@ -81,8 +81,7 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_CLIENT';
+        
 
         return array_unique($roles);
     }
