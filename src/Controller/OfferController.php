@@ -53,19 +53,17 @@ class OfferController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
     $offer = new Offer();
-    $offer->setPrice($data['Price']);
-    $offer->setIsActive($data['Active']);
+    $offer->setPrice($data['price']);
+    $offer->setIsActive($data['active']);
 
 
     
     // Convert DateStart string to DateTime object
-    $dateStart = new \DateTime($data['DateStart']);
-    $offer->setDateStart($dateStart);
+    $offer->setDateStart($data['dateStart']);
 
     // Convert DateEnd string to DateTime object
-    $dateEnd = new \DateTime($data['DateEnd']);
-    $offer->setDateEnd($dateEnd);
-    $categoryId = $data['Category'];
+    $offer->setDateEnd($data['dateEnd']);
+    $categoryId = $data['category'];
     $category = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
     $offer->setCategory($category);
     
@@ -94,7 +92,8 @@ class OfferController extends AbstractController
                 'Price'=>$offer->getPrice(),
                 'DateStart'=>$offer->getDateStart(),
                 'DateEnd'=>$offer->getDateEnd(),
-                'Category'=>$offer->getCategory()->getId(),
+                'Category'=>$offer->getCategory()->getType(),
+                'Active'=>$offer->isIsActive(),
                 
                 ];
           
@@ -111,17 +110,20 @@ public function edit(Request $request, Offer $offer): JsonResponse
 
     // Update the properties of the offer entity
     $offer->setPrice($data['Price']);
-    $offer->setDateStart(new \DateTime($data['DateStart']));
-    $offer->setDateEnd(new \DateTime($data['DateEnd']));
+    $offer->setIsActive($data['Active']);
+
+    $offer->setDateStart($data['DateStart']);
+    $offer->setDateEnd($data['DateEnd']);
 
     // Get the category ID from the request data
-    $categoryId = $data['Category'];
+    $categoryType = $data['Category'];
 
     // Fetch the category entity based on the ID
-    $category = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
+    $category1 = $this->getDoctrine()->getRepository(CategoryOffer::class)->findByType($categoryType);
+    $categoryId =$category1[0]->getId();
 
-    // Set the category in the offer entity
-    $offer->setCategory($category);
+    $category2 = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
+    $offer->setCategory( $category2);
 
     $entityManager = $this->getDoctrine()->getManager();
     $entityManager->flush();

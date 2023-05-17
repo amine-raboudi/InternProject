@@ -39,20 +39,19 @@ class CategoryOfferRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return CategoryOffer[] Returns an array of CategoryOffer objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return CategoryOffer[] Returns an array of CategoryOffer objects
+     */
+    public function findByType($value): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.type = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getResult()
+        ;
+  }
+
 
 //    public function findOneBySomeField($value): ?CategoryOffer
 //    {

@@ -23,12 +23,12 @@ class Offer
     private $Price;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="string")
      */
     private $DateStart;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="string")
      */
     private $DateEnd;
 
@@ -59,24 +59,24 @@ class Offer
         return $this;
     }
 
-    public function getDateStart(): ?\DateTimeInterface
+    public function getDateStart(): ?string
     {
         return $this->DateStart;
     }
 
-    public function setDateStart(\DateTimeInterface $DateStart): self
+    public function setDateStart(string $DateStart): self
     {
         $this->DateStart = $DateStart;
 
         return $this;
     }
 
-    public function getDateEnd(): ?\DateTimeInterface
+    public function getDateEnd(): ?string
     {
         return $this->DateEnd;
     }
 
-    public function setDateEnd(\DateTimeInterface $DateEnd): self
+    public function setDateEnd(string $DateEnd): self
     {
         $this->DateEnd = $DateEnd;
 
