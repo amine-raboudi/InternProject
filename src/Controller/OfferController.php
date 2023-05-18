@@ -51,7 +51,6 @@ class OfferController extends AbstractController
     public function new(Request $request, OfferRepository $offerRepository): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
     $offer = new Offer();
     $offer->setPrice($data['price']);
     $offer->setIsActive($data['active']);
