@@ -6,5 +6,8 @@ login:
     path: /login
     controller: App\Controller\SecurityController::login
     methods: [GET, POST]
-  
+
+register:
+  path: /register/client
+  controller: App\Controller\RegistrationController::Client
 

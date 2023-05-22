@@ -40,6 +40,11 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $IsVerified;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $VerificationToken;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +141,18 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $IsVerified): self
     {
         $this->IsVerified = $IsVerified;
+
+        return $this;
+    }
+
+    public function getVerificationToken(): ?string
+    {
+        return $this->VerificationToken;
+    }
+
+    public function setVerificationToken(?string $VerificationToken): self
+    {
+        $this->VerificationToken = $VerificationToken;
 
         return $this;
     }
