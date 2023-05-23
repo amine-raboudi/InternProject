@@ -2,10 +2,7 @@ dashboard:
   path: /admin
   controller: App\Controller\Admin\DashboardController::index
 
-login:
-    path: /login
-    controller: App\Controller\SecurityController::login
-    methods: [GET, POST]
+
 
 register:
   path: /register/client
