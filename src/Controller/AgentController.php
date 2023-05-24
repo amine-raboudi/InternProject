@@ -70,12 +70,46 @@ class AgentController extends AbstractController
     public function update(Request $request,$id): Response
     {
         $agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
+        $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($agent->getEmail());
         $param=json_decode($request->getContent(),true );
         $agent->setEmail($param['email']);
         $agent->setRoles($param['roles']);
         $agent->setPassword($param['password']);
         $agent->setStatus($param['status']);
+        if( $user==null){
+            $user=new  User();
+            if(($param['status']=='Accepted')){
+                $user->setEmail($param['email']);
+                $user->setRoles($param['roles']);
+                $user->setPassword($param['password']);
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+    
+    
+            }
+            
+        }else{
+            $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($agent->getEmail());
+            if(($param['status']=='Accepted')){
+                $user->setEmail($param['email']);
+                $user->setRoles($param['roles']);
+                $user->setPassword($param['password']);
+                $entityManager=$this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+    
+    
+            }else{
+                if(($param['status']=='Denied')){
+            $entityManager=$this->getDoctrine()->getManager();
 
+            $entityManager->remove($user);
+                }
+            };
+            
+            
+
+
+        }
         $entityManager=$this->getDoctrine()->getManager();
         $entityManager->persist($agent);
         $entityManager->flush();

@@ -39,38 +39,32 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/register/agent", name="app_agent_register")
+     * @Route("/register/agent", name="app_agent_register",methods={"POST"})
      */
-    public function agent(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function agent(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): JsonResponse
     {
        
             $Agent = new Agent();
-            $form = $this->createForm(AgentType::class, $Agent);
-            $form->handleRequest($request);
+            $data = json_decode($request->getContent(), true);
             
+            $email = $data['email'];
+            $password = $data['password'];
+            $Agent->setEmail($email);
+
     
-            if ($form->isSubmitted() && $form->isValid()) {
-                // encode the plain password
-                $Agent->setPassword(
-                    $userPasswordHasher->hashPassword(
-                            $Agent,
-                            $form->get('plainPassword')->getData()
-                        )
-                    );
+            $Agent->setPassword($password);
                 $Agent->setRoles(['ROLE_AGENT']);
                 $Agent->setStatus('Waiting');
+                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($Agent);
-            
                 $entityManager->flush();
+        
 
 
     
-                return $this->redirectToRoute('app_check');
-            }
-    
-            return $this->render('agent/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
+              
+                return new JsonResponse(['message' => 'Agent registered successfully! '], 201);
+
         }
 
     /**
@@ -165,40 +159,25 @@ class RegistrationController extends AbstractController
     {
        
             $admin = new Admin();
-            $user=new User();
-            $form = $this->createForm(AdminType::class, $admin);
-            $form->handleRequest($request);
+            $data = json_decode($request->getContent(), true);
             
+            $email = $data['email'];
+            $password = $data['password'];
+            $admin->setEmail($email);
+
     
-            if ($form->isSubmitted() && $form->isValid()) {
-                // encode the plain password
-                $admin->setPassword(
-                    $userPasswordHasher->hashPassword(
-                            $admin,
-                            $form->get('plainPassword')->getData()
-                        )
-                    );
+            $admin->setPassword($password);
                 $admin->setRoles(['ROLE_ADMIN']);
-                $admin->setStatus('Waiting');
-
-                $user->setEmail($admin->getEmail());
-                $user->setRoles($admin->getRoles());
-                $user->setPassword($admin->getPassword());
-
+                $admin->setStatus('Denied');
+                $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($admin);
-
-               
-                
                 $entityManager->flush();
+        
 
 
     
-                return $this->redirectToRoute('app_check');
-            }
-    
-            return $this->render('agent/index.html.twig', [
-                'form' => $form->createView(),
-            ]);
+              
+                return new JsonResponse(['message' => 'Admin registered successfully! '], 201);
         }
 
     

@@ -11,6 +11,9 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
 use App\Entity\Agent;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+
+
 
 
 
@@ -30,7 +33,7 @@ class MailController extends AbstractController
      /**
      * @Route("/send-email", name="send_email", methods={"POST"})
      */
-    public function sendEmail(Request $request, MailerInterface $mailer)
+    public function sendEmail(Request $request, MailerInterface $mailer):JsonResponse
     {
         // Parse input data from the request
        
@@ -57,20 +60,8 @@ class MailController extends AbstractController
     public function sendAg(Request $request, MailerInterface $mailer)
     {
         // Parse input data from the request
-        $user=new User();
-        $jsonData = $request->getContent();
-
-        $data = json_decode($jsonData, true);
-
-        $ag=$this->getDoctrine()->getRepository(Agent::class)->findOneByMail($data['recipient']);
-        $user->setEmail($ag->getEmail());
-        $user->setRoles($ag->getRoles());
-        $user->setPassword($ag->getPassword());
-        $entityManager=$this->getDoctrine()->getManager();
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
+        
+        $data = json_decode($request->getContent(), true);
 
         // Create a new email message
         $email = new Email();
@@ -87,26 +78,29 @@ class MailController extends AbstractController
     }
 
      /**
-     * @Route("/deny-ag/{id}", name="deny_ag", methods={"DELETE"})
+     * @Route("/deny-ag", name="deny_ag", methods={"POST"})
      */
-    public function denyAg($id)
+    public function denyAg(Request $request,MailerInterface $mailer):JsonResponse
     {
         // Parse input data from the request
+        $data = json_decode($request->getContent(), true);
         
-    
-        $ag=$this->getDoctrine()->getRepository(Agent::class)->find($id);
-        $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($ag->getEmail());
-        $entityManager=$this->getDoctrine()->getManager();
-        $entityManager->remove($user);
+       
+        $email = new Email();
+        $email->from('mohamedamineraboudi@gmail.com')
+              ->to($data['recipient'])
+              ->subject($data['subject'])
+              ->html($data['message']);
 
+        // Send the email using Swift Mailer
+        $mailer->send($email);
 
-        $entityManager->flush();
-
+        // Return a success response to the Angular front-end
+        return new JsonResponse(['message' => 'Email sent successfully']);
 
         // Create a new email message
         
         // Return a success response to the Angular front-end
-        return new JsonResponse(['message' => 'denied successfully']);
     }
 
    
