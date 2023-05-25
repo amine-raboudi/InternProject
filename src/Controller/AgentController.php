@@ -159,7 +159,31 @@ class AgentController extends AbstractController
         );
     }
 
+/**
+     * @Route("/agenceEmail/{email}", name="agence_email", methods={"GET"})
+     */
+    public function OneEmail($email): Response
+    {
+        $d=$this->getDoctrine()->getRepository(Agent::class)->findOneByMail($email);
+        
+        
+            $res[]=[
+                'id'=>$d->getId(),
+                'email'=>$d->getEmail(),
+                'roles'=>$d->getRoles(),
+                'password'=>$d->getPassword(),
+                'status'=>$d->getStatus()
+                ];
+        
+        
+       
+        return $this->json(
+            $res
+        );
+    }
 
+    
+  
     
     }
 

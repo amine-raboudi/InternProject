@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Offer;
+use App\Entity\Agent;
+
 use App\Entity\CategoryOffer;
 use App\Form\OfferType;
 use App\Repository\OfferRepository;
@@ -33,6 +35,8 @@ class OfferController extends AbstractController
                 'DateEnd' => $offer->getDateEnd(),
                 'Active'=>$offer->isIsActive(),
                 'Category' => $offer->getCategory()->getType(),
+                'Agent' => $offer->getAgent()->getId(),
+
 
                 
             ];
@@ -65,6 +69,9 @@ class OfferController extends AbstractController
     $categoryId = $data['category'];
     $category = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
     $offer->setCategory($category);
+    $AgentId = $data['Agent'];
+    $Agent = $this->getDoctrine()->getRepository(Agent::class)->find($AgentId);
+    $offer->setAgent($Agent);
     
     $entityManager = $this->getDoctrine()->getManager();
     $entityManager->persist($offer);
@@ -93,6 +100,8 @@ class OfferController extends AbstractController
                 'DateEnd'=>$offer->getDateEnd(),
                 'Category'=>$offer->getCategory()->getType(),
                 'Active'=>$offer->isIsActive(),
+                'Agent' => $offer->getAgent()->getId(),
+
                 
                 ];
           
@@ -124,6 +133,10 @@ public function edit(Request $request, Offer $offer): JsonResponse
     $category2 = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
     $offer->setCategory( $category2);
 
+    $AgentId = $data['Agent'];
+    $Agent = $this->getDoctrine()->getRepository(Agent::class)->find($AgentId);
+    $offer->setAgent($Agent);
+
     $entityManager = $this->getDoctrine()->getManager();
     $entityManager->flush();
 
@@ -143,4 +156,56 @@ public function delete(Offer $offer): JsonResponse
 
     return new JsonResponse('Offer deleted');
 }
+
+
+      /**
+     * @Route("/offAg/{id}", name="off_Ag", methods={"GET"})
+     */
+    public function OffAgent($id): JsonResponse
+    {
+        $d=$this->getDoctrine()->getRepository(Offer::class)->findAll();
+        $data = [];
+        foreach ($d as $p) {
+            $data[] = [
+                'idAg' => $p->getAgent()->getId(),
+                'id'=>$p->getId(),
+                
+                
+            ];
+        }
+        $cli=[];
+        $j=0;
+        
+        foreach ($data as $p) {
+            if($p['idAg']== $id){
+
+                $cli[$j]=$this->getDoctrine()->getRepository(Offer::class)->find($p['id']);
+
+                $j++;
+            }
+
+        }
+
+        foreach ($cli as $offer) {
+           
+            $res[]=[
+                'id' => $offer->getId(),
+                'Price' => $offer->getPrice(),
+                'DateStart' => $offer->getDateStart(),
+                'DateEnd' => $offer->getDateEnd(),
+                'Active'=>$offer->isIsActive(),
+                'Category' => $offer->getCategory()->getType(),
+                'Agent' => $offer->getAgent()->getId(),
+
+    
+                ];
+                
+            
+
+        }
+
+        return new JsonResponse($res);
+    }
+
+
 }

@@ -72,4 +72,14 @@ public function findOneByMail($email): ?User
             ->getOneOrNullResult()
         ;
     }
+
+    public function findOneByAg($id): ?User
+   {
+       return $this->createQueryBuilder('u')
+            ->andWhere('u.agent = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

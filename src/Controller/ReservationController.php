@@ -78,7 +78,7 @@ class ReservationController extends AbstractController
     /**
      * @Route("/{id}", name="app_reservation_show", methods={"GET"})
      */
-    public function show(Reservation $Reservation,$id): JsonResponse
+    public function showId(Reservation $Reservation,$id): JsonResponse
     {
         $Reservation =$this->getDoctrine()->getRepository(Reservation::class)->find($id);
   
@@ -138,4 +138,96 @@ public function delete(Reservation $Reservation): JsonResponse
 
     return new JsonResponse('Reservation deleted');
 }
+
+      /**
+     * @Route("/agenceCli/{id}", name="agence_cli", methods={"GET"})
+     */
+    public function AgentClient(ReservationRepository $reservationRepository   ,$id): JsonResponse
+    {
+        $d=$this->getDoctrine()->getRepository(Reservation::class)->findAll();
+        $data = [];
+        foreach ($d as $p) {
+            $data[] = [
+                'id' => $p->getAgent()->getId(),
+                'email'=>$p->getClient()->getEmail(),
+                
+                
+            ];
+        }
+        $cli=[];
+        $j=0;
+        
+        foreach ($data as $p) {
+            if($p['id']== $id){
+
+                $cli[$j]=$this->getDoctrine()->getRepository(Client::class)->findOneBySomeField($p['email']);
+
+                $j++;
+            }
+
+        }
+        $data=[];
+        foreach ($cli as $p) {
+           
+            $res[]=[
+                'id'=>$p->getId(),
+                'email'=>$p->getEmail(),
+                'roles'=>$p->getRoles(),
+                'password'=>$p->getPassword(),
+                'is_verified'=>$p->isIsVerified()
+                ];
+                
+            
+
+        }
+        
+        return new JsonResponse($res);
+    }
+
+      /**
+     * @Route("/resAg/{id}", name="res_Ag", methods={"GET"})
+     */
+    public function ResAgent(ReservationRepository $reservationRepository   ,$id): JsonResponse
+    {
+        $d=$this->getDoctrine()->getRepository(Reservation::class)->findAll();
+        $data = [];
+        foreach ($d as $p) {
+            $data[] = [
+                'idAg' => $p->getAgent()->getId(),
+                'id'=>$p->getId(),
+                
+                
+            ];
+        }
+        $cli=[];
+        $j=0;
+        
+        foreach ($data as $p) {
+            if($p['idAg']== $id){
+
+                $cli[$j]=$this->getDoctrine()->getRepository(Reservation::class)->find($p['id']);
+
+                $j++;
+            }
+
+        }
+
+        foreach ($cli as $p) {
+           
+            $res[]=[
+                'id' => $p->getId(),
+                'Offer' => $p->getOffer()->getId(),
+                'Client' => $p->getClient()->getEmail(),
+                'Agent' => $p->getAgent()->getEmail(),
+    
+                ];
+                
+            
+
+        }
+
+        return new JsonResponse($res);
+    }
+
+
 }

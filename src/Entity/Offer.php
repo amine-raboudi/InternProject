@@ -49,6 +49,11 @@ class Offer
      */
     private $reservations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Agent::class, inversedBy="offers")
+     */
+    private $agent;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -145,6 +150,18 @@ class Offer
                 $reservation->setOffer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAgent(): ?Agent
+    {
+        return $this->agent;
+    }
+
+    public function setAgent(?Agent $agent): self
+    {
+        $this->agent = $agent;
 
         return $this;
     }
