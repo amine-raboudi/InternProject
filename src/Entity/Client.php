@@ -52,6 +52,26 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $reservations;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $FullName;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Adress;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $PhoneNumber;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Country;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -195,6 +215,54 @@ class Client implements UserInterface, PasswordAuthenticatedUserInterface
                 $reservation->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFullName(): ?string
+    {
+        return $this->FullName;
+    }
+
+    public function setFullName(string $FullName): self
+    {
+        $this->FullName = $FullName;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->Adress;
+    }
+
+    public function setAdress(string $Adress): self
+    {
+        $this->Adress = $Adress;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->PhoneNumber;
+    }
+
+    public function setPhoneNumber(string $PhoneNumber): self
+    {
+        $this->PhoneNumber = $PhoneNumber;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->Country;
+    }
+
+    public function setCountry(string $Country): self
+    {
+        $this->Country = $Country;
 
         return $this;
     }

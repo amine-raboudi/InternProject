@@ -80,9 +80,18 @@ class RegistrationController extends AbstractController
         // Validate and sanitize the data as per your requirements
         $email = $data['email'];
         $password = $data['password'];
+        $name = $data['fullName'];
+        $Adress = $data['address'];
+        $PhoneNumber = $data['phoneNumber'];
+        $Country = $data['country'];
 
-        // Create a new User entity
+
         $client->setEmail($email);
+        $client->setFullName($name);
+        $client->setAdress($Adress);
+        $client->setPhoneNumber($PhoneNumber);
+        $client->setCountry($Country);
+
 
         $client->setIsVerified(false);
         $client->setRoles(['ROLE_CLIENT']);

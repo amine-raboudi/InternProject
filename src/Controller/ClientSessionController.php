@@ -25,7 +25,13 @@ class ClientSessionController extends AbstractController
                 'email'=>$client->getEmail(),
                 'roles'=>$client->getRoles(),
                 'password'=>$client->getPassword(),
-                'is_verified'=>$client->isIsVerified()
+                'is_verified'=>$client->isIsVerified(),
+                'adress'=>$client->getAdress(),
+                'phoneNumber'=>$client->getPhoneNumber(),
+                'country'=>$client->getCountry(),
+                'fullName'=>$client->getFullName(),
+
+
                 ];
           
         return $this->json($res);
@@ -43,6 +49,11 @@ class ClientSessionController extends AbstractController
         $client->setRoles($param['roles']);
         $client->setPassword($param['password']);
         $client->setIsVerified($param['is_verified']);
+        $client->setFullName($param['fullName']);
+        $client->setAdress($param['adress']);
+        $client->setPhoneNumber($param['phoneNumber']);
+        $client->setCountry($param['country']);
+
 
         $entityManager=$this->getDoctrine()->getManager();
         $entityManager->persist($client);
@@ -64,6 +75,10 @@ class ClientSessionController extends AbstractController
         $client->setRoles($param['roles']);
         $client->setPassword($param['password']);
         $client->setIsVerified($param['is_verified']);
+        $client->setFullName($param['fullName']);
+        $client->setAdress($param['adress']);
+        $client->setPhoneNumber($param['phoneNumber']);
+        $client->setCountry($param['country']);
 
         $entityManager=$this->getDoctrine()->getManager();
         $entityManager->persist($client);
@@ -96,15 +111,20 @@ class ClientSessionController extends AbstractController
      */
     public function list(): Response
     {
-        $client=$this->getDoctrine()->getRepository(Client::class)->findAll();
-        foreach($client  as  $d)
+        $d=$this->getDoctrine()->getRepository(Client::class)->findAll();
+        foreach($d  as  $client)
         {
             $res[]=[
-                'id'=>$d->getId(),
-                'email'=>$d->getEmail(),
-                'roles'=>$d->getRoles(),
-                'password'=>$d->getPassword(),
-                'is_verified'=>$d->isIsVerified()
+                'id'=>$client->getId(),
+                'email'=>$client->getEmail(),
+                'roles'=>$client->getRoles(),
+                'password'=>$client->getPassword(),
+                'is_verified'=>$client->isIsVerified(),
+                'adress'=>$client->getAdress(),
+                'phoneNumber'=>$client->getPhoneNumber(),
+                'country'=>$client->getCountry(),
+                'fullName'=>$client->getFullName(),
+
                 ];
         }
 
