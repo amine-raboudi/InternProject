@@ -20,7 +20,6 @@ class GoogleController extends AbstractController
     {
         // on Symfony 3.3 or lower, $clientRegistry = $this->get('knpu.oauth2.registry');
 
-        // will redirect to Facebook!
         return $clientRegistry
             ->getClient('google') // key used in config/packages/knpu_oauth2_client.yaml
             ->redirect([
@@ -59,4 +58,7 @@ class GoogleController extends AbstractController
             var_dump($e->getMessage()); die;
         }
     }
+
+
+    
 }

@@ -30,7 +30,7 @@ class LoginController extends AbstractController
         if ($password==$user->getPassword() &&  $email==$user->getEmail()) {
             $token = $jwtManager->create($user);
 
-            return $this->json(['token' => $token]);
+            return $this->json(['token' => $token,'role' => $user->getRoles()]);
             
         }
 

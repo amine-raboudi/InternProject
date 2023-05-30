@@ -49,12 +49,24 @@ class RegistrationController extends AbstractController
             
             $email = $data['email'];
             $password = $data['password'];
-            $Agent->setEmail($email);
+            $Name = $data['name'];
+            $Adress = $data['address'];
+            $PhoneNumber = $data['phoneNumber'];
+            $Country = $data['country'];
+            $Logo = $data['logo'];
 
-    
+
+            $Agent->setEmail($email);
+            $Agent->setEmail($email);
+            $Agent->setName($Name);
+            $Agent->setAdress($Adress);
+            $Agent->setPhoneNumber($PhoneNumber);
+            $Agent->setCountry($Country);
+            $Agent->setLogo($Logo);
             $Agent->setPassword($password);
-                $Agent->setRoles(['ROLE_AGENT']);
-                $Agent->setStatus('Waiting');
+            $Agent->setRoles(['ROLE_AGENT']);
+            $Agent->setStatus('Waiting');
+
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($Agent);
                 $entityManager->flush();
@@ -68,7 +80,7 @@ class RegistrationController extends AbstractController
         }
 
     /**
-     * @Route("register/client", name="app_client_register",methods={"POST"})
+     * @Route(" ", name="app_client_register",methods={"POST"})
      */
     public function Client(Request $request, UserPasswordHasherInterface $passwordEncoder, EntityManagerInterface $entityManager): JsonResponse
     {

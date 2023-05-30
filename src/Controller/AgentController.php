@@ -38,7 +38,13 @@ class AgentController extends AbstractController
                 'email'=>$agence->getEmail(),
                 'roles'=>$agence->getRoles(),
                 'password'=>$agence->getPassword(),
-                'status'=>$agence->getStatus()
+                'status'=>$agence->getStatus(),
+                'adress'=>$agence->getAdress(),
+                'phoneNumber'=>$agence->getPhoneNumber(),
+                'country'=>$agence->getCountry(),
+                'name'=>$agence->getName(),
+                'logo'=>$agence->getLogo(),
+
                 ];
           
         return $this->json($res);
@@ -48,15 +54,21 @@ class AgentController extends AbstractController
      */
     public function post(Request $request): Response
     {
-        $agent=new Agent;
-        $param=json_decode($request->getContent(),true );
-        $agent->setEmail($param['email']);
-        $agent->setRoles($param['roles']);
-        $agent->setPassword($param['password']);
-        $agent->setStatus($param['status']);
+        $Agent=new Agent;
+        $data=json_decode($request->getContent(),true );
+
+        $Agent->setEmail( $data['email']);
+        $Agent->setRoles($data['roles']);
+        $Agent->setName($data['name']);
+        $Agent->setAdress($data['address']);
+        $Agent->setPhoneNumber( $data['phoneNumber']);
+        $Agent->setCountry($data['country']);
+        $Agent->setLogo($data['logo']);
+        $Agent->setPassword( $data['password']);
+        $Agent->setStatus($data['status']);
 
         $entityManager=$this->getDoctrine()->getManager();
-        $entityManager->persist($agent);
+        $entityManager->persist($Agent);
         $entityManager->flush();
 
         return $this->json(
@@ -69,19 +81,26 @@ class AgentController extends AbstractController
      */
     public function update(Request $request,$id): Response
     {
-        $agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
-        $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($agent->getEmail());
-        $param=json_decode($request->getContent(),true );
-        $agent->setEmail($param['email']);
-        $agent->setRoles($param['roles']);
-        $agent->setPassword($param['password']);
-        $agent->setStatus($param['status']);
+        $Agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
+
+        $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($Agent->getEmail());
+
+        $data=json_decode($request->getContent(),true );
+        $Agent->setEmail( $data['email']);
+        $Agent->setRoles($data['roles']);
+        $Agent->setName($data['name']);
+        $Agent->setAdress($data['adress']);
+        $Agent->setPhoneNumber( $data['phoneNumber']);
+        $Agent->setCountry($data['country']);
+        $Agent->setLogo($data['logo']);
+        $Agent->setPassword( $data['password']);
+        $Agent->setStatus($data['status']);
         if( $user==null){
             $user=new  User();
-            if(($param['status']=='Accepted')){
-                $user->setEmail($param['email']);
-                $user->setRoles($param['roles']);
-                $user->setPassword($param['password']);
+            if(($data['status']=='Accepted')){
+                $user->setEmail($data['email']);
+                $user->setRoles($data['roles']);
+                $user->setPassword($data['password']);
                 $entityManager=$this->getDoctrine()->getManager();
                 $entityManager->persist($user);
     
@@ -89,17 +108,17 @@ class AgentController extends AbstractController
             }
             
         }else{
-            $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($agent->getEmail());
-            if(($param['status']=='Accepted')){
-                $user->setEmail($param['email']);
-                $user->setRoles($param['roles']);
-                $user->setPassword($param['password']);
+            $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($Agent->getEmail());
+            if(($data['status']=='Accepted')){
+                $user->setEmail($data['email']);
+                $user->setRoles($data['roles']);
+                $user->setPassword($data['password']);
                 $entityManager=$this->getDoctrine()->getManager();
                 $entityManager->persist($user);
     
     
             }else{
-                if(($param['status']=='Denied')){
+                if(($data['status']=='Denied')){
             $entityManager=$this->getDoctrine()->getManager();
 
             $entityManager->remove($user);
@@ -111,7 +130,7 @@ class AgentController extends AbstractController
 
         }
         $entityManager=$this->getDoctrine()->getManager();
-        $entityManager->persist($agent);
+        $entityManager->persist($Agent);
         $entityManager->flush();
 
         return $this->json(
@@ -141,14 +160,19 @@ class AgentController extends AbstractController
     public function list(): Response
     {
         $agent=$this->getDoctrine()->getRepository(Agent::class)->findAll();
-        foreach($agent  as  $d)
+        foreach($agent  as  $agence)
         {
             $res[]=[
-                'id'=>$d->getId(),
-                'email'=>$d->getEmail(),
-                'roles'=>$d->getRoles(),
-                'password'=>$d->getPassword(),
-                'status'=>$d->getStatus()
+                'id'=>$agence->getId(),
+                'email'=>$agence->getEmail(),
+                'roles'=>$agence->getRoles(),
+                'password'=>$agence->getPassword(),
+                'status'=>$agence->getStatus(),
+                'adress'=>$agence->getAdress(),
+                'phoneNumber'=>$agence->getPhoneNumber(),
+                'country'=>$agence->getCountry(),
+                'name'=>$agence->getName(),
+                'logo'=>$agence->getLogo(),
                 ];
         }
 

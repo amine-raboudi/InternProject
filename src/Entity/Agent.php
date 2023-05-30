@@ -53,6 +53,31 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $offers;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Adress;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $PhoneNumber;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Country;
+
+    /**
+     * @ORM\Column(type="string", length=1000000)
+     */
+    private $Logo;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -219,6 +244,66 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
                 $offer->setAgent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->Name;
+    }
+
+    public function setName(string $Name): self
+    {
+        $this->Name = $Name;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->Adress;
+    }
+
+    public function setAdress(string $Adress): self
+    {
+        $this->Adress = $Adress;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->PhoneNumber;
+    }
+
+    public function setPhoneNumber(string $PhoneNumber): self
+    {
+        $this->PhoneNumber = $PhoneNumber;
+
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->Country;
+    }
+
+    public function setCountry(string $Country): self
+    {
+        $this->Country = $Country;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->Logo;
+    }
+
+    public function setLogo(string $Logo): self
+    {
+        $this->Logo = $Logo;
 
         return $this;
     }
