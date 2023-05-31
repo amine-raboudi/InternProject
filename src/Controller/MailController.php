@@ -98,9 +98,6 @@ class MailController extends AbstractController
         // Return a success response to the Angular front-end
         return new JsonResponse(['message' => 'Email sent successfully']);
 
-        // Create a new email message
-        
-        // Return a success response to the Angular front-end
     }
 
    

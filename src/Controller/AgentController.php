@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Agent;
 use App\Entity\User;
 use App\Form\AgentType;
@@ -44,6 +43,7 @@ class AgentController extends AbstractController
                 'country'=>$agence->getCountry(),
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
+                'city'=>$agence->getCity(),
 
                 ];
           
@@ -56,16 +56,17 @@ class AgentController extends AbstractController
     {
         $Agent=new Agent;
         $data=json_decode($request->getContent(),true );
-
         $Agent->setEmail( $data['email']);
-        $Agent->setRoles($data['roles']);
+        $Agent->setRoles(["ROLE_AGENT"]);
         $Agent->setName($data['name']);
         $Agent->setAdress($data['address']);
         $Agent->setPhoneNumber( $data['phoneNumber']);
         $Agent->setCountry($data['country']);
         $Agent->setLogo($data['logo']);
         $Agent->setPassword( $data['password']);
-        $Agent->setStatus($data['status']);
+        $Agent->setConfirmPassword($data['confirmPassword']);
+        $Agent->setCity( $data['city']);
+        $Agent->setStatus('Waiting');
 
         $entityManager=$this->getDoctrine()->getManager();
         $entityManager->persist($Agent);
@@ -82,18 +83,20 @@ class AgentController extends AbstractController
     public function update(Request $request,$id): Response
     {
         $Agent=$this->getDoctrine()->getRepository(Agent::class)->find($id);
-
+        
         $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($Agent->getEmail());
-
         $data=json_decode($request->getContent(),true );
         $Agent->setEmail( $data['email']);
         $Agent->setRoles($data['roles']);
         $Agent->setName($data['name']);
-        $Agent->setAdress($data['adress']);
+        $Agent->setAdress($data['address']);
         $Agent->setPhoneNumber( $data['phoneNumber']);
         $Agent->setCountry($data['country']);
         $Agent->setLogo($data['logo']);
         $Agent->setPassword( $data['password']);
+        $Agent->setStatus($data['status']);
+        $Agent->setConfirmPassword($data['confirmPaswword']);
+        $Agent->setCity( $data['city']);
         $Agent->setStatus($data['status']);
         if( $user==null){
             $user=new  User();
@@ -173,6 +176,8 @@ class AgentController extends AbstractController
                 'country'=>$agence->getCountry(),
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
+                'city'=>$agence->getCity(),
+
                 ];
         }
 
@@ -188,15 +193,22 @@ class AgentController extends AbstractController
      */
     public function OneEmail($email): Response
     {
-        $d=$this->getDoctrine()->getRepository(Agent::class)->findOneByMail($email);
+        $agence=$this->getDoctrine()->getRepository(Agent::class)->findOneByMail($email);
         
         
             $res[]=[
-                'id'=>$d->getId(),
-                'email'=>$d->getEmail(),
-                'roles'=>$d->getRoles(),
-                'password'=>$d->getPassword(),
-                'status'=>$d->getStatus()
+                'id'=>$agence->getId(),
+                'email'=>$agence->getEmail(),
+                'roles'=>$agence->getRoles(),
+                'password'=>$agence->getPassword(),
+                'status'=>$agence->getStatus(),
+                'adress'=>$agence->getAdress(),
+                'phoneNumber'=>$agence->getPhoneNumber(),
+                'country'=>$agence->getCountry(),
+                'name'=>$agence->getName(),
+                'logo'=>$agence->getLogo(),
+                'city'=>$agence->getCity(),
+
                 ];
         
         

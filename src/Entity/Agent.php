@@ -69,7 +69,7 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
     private $PhoneNumber;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      */
     private $Country;
 
@@ -77,6 +77,16 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=1000000)
      */
     private $Logo;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $confirmPassword;
 
     public function __construct()
     {
@@ -126,7 +136,6 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = '';
 
         return array_unique($roles);
     }
@@ -284,12 +293,14 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCountry(): ?string
+    public function getCountry(): array
     {
-        return $this->Country;
-    }
+        $Country = $this->Country;
 
-    public function setCountry(string $Country): self
+        return array_unique($Country);   
+     }
+
+    public function setCountry(array $Country): self
     {
         $this->Country = $Country;
 
@@ -304,6 +315,30 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLogo(string $Logo): self
     {
         $this->Logo = $Logo;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getConfirmPassword(): ?string
+    {
+        return $this->confirmPassword;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): self
+    {
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }
