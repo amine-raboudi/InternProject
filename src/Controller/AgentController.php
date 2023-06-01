@@ -44,6 +44,10 @@ class AgentController extends AbstractController
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
                 'city'=>$agence->getCity(),
+                'roles'=>$agence->getRoles(),
+                'confirmPaswword'=>$agence->getConfirmPaswword(),
+                'status'=>$agence->getStatus(),
+
 
                 ];
           
@@ -89,15 +93,14 @@ class AgentController extends AbstractController
         $Agent->setEmail( $data['email']);
         $Agent->setRoles($data['roles']);
         $Agent->setName($data['name']);
-        $Agent->setAdress($data['address']);
+        $Agent->setAdress($data['adress']);
         $Agent->setPhoneNumber( $data['phoneNumber']);
         $Agent->setCountry($data['country']);
         $Agent->setLogo($data['logo']);
         $Agent->setPassword( $data['password']);
         $Agent->setStatus($data['status']);
-        $Agent->setConfirmPassword($data['confirmPaswword']);
+        $Agent->setConfirmPassword($data['confirmPassword']);
         $Agent->setCity( $data['city']);
-        $Agent->setStatus($data['status']);
         if( $user==null){
             $user=new  User();
             if(($data['status']=='Accepted')){
@@ -177,6 +180,9 @@ class AgentController extends AbstractController
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
                 'city'=>$agence->getCity(),
+                'roles'=>$agence->getRoles(),
+                'confirmPaswword'=>$agence->getConfirmPaswword(),
+                'status'=>$agence->getStatus(),
 
                 ];
         }
