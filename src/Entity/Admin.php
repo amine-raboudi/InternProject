@@ -39,6 +39,41 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $Status;
+    
+     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Name;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Adress;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $PhoneNumber;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $Country;
+
+    /**
+     * @ORM\Column(type="string", length=1000000)
+     */
+    private $Logo;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $city;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $confirmPassword;
 
     public function getId(): ?int
     {
@@ -136,6 +171,93 @@ class Admin implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(string $Status): self
     {
         $this->Status = $Status;
+
+        return $this;
+    }
+
+    
+    public function getName(): ?string
+    {
+        return $this->Name;
+    }
+
+    public function setName(string $Name): self
+    {
+        $this->Name = $Name;
+
+        return $this;
+    }
+
+    public function getAdress(): ?string
+    {
+        return $this->Adress;
+    }
+
+    public function setAdress(string $Adress): self
+    {
+        $this->Adress = $Adress;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->PhoneNumber;
+    }
+
+    public function setPhoneNumber(string $PhoneNumber): self
+    {
+        $this->PhoneNumber = $PhoneNumber;
+
+        return $this;
+    }
+
+    public function getCountry(): array
+    {
+        $Country = $this->Country;
+
+        return array_unique($Country);   
+     }
+
+    public function setCountry(array $Country): self
+    {
+        $this->Country = $Country;
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->Logo;
+    }
+
+    public function setLogo(string $Logo): self
+    {
+        $this->Logo = $Logo;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getConfirmPassword(): ?string
+    {
+        return $this->confirmPassword;
+    }
+
+    public function setConfirmPassword(string $confirmPassword): self
+    {
+        $this->confirmPassword = $confirmPassword;
 
         return $this;
     }

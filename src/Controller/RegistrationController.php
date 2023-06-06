@@ -182,19 +182,35 @@ class RegistrationController extends AbstractController
     public function Admin(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
        
-            $admin = new Admin();
+            $Agent = new Admin();
             $data = json_decode($request->getContent(), true);
             
             $email = $data['email'];
             $password = $data['password'];
-            $admin->setEmail($email);
+            $Name = $data['name'];
+            $Adress = $data['adress'];
+            $PhoneNumber = $data['phoneNumber'];
+            $Country = $data['country'];
+            $city = $data['city'];   
+            $confirmPassword = $data['confirmPassword'];
+            $Logo = $data['logo'];
 
-    
-            $admin->setPassword($password);
-                $admin->setRoles(['ROLE_ADMIN']);
-                $admin->setStatus('Denied');
+
+
+            $Agent->setEmail($email);
+            $Agent->setName($Name);
+            $Agent->setAdress($Adress);
+            $Agent->setPhoneNumber($PhoneNumber);
+            $Agent->setCountry($Country);
+            $Agent->setLogo($Logo);
+            $Agent->setCity($city);
+            $Agent->setConfirmPassword($confirmPassword);
+            $Agent->setPassword($password);
+            $Agent->setRoles(['ROLE_ADMIN']);
+            $Agent->setStatus('Waiting');
+
                 $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($admin);
+                $entityManager->persist($Agent);
                 $entityManager->flush();
         
 

@@ -29,22 +29,11 @@ class AdminController extends AbstractController
 {
    
 
-public function __construct(){
-
-}
-    
 
 
 
 
-
-    /**
-     * @Route("/admin/management/", name="app_admin_management")
-     */
-    public function index(): Response
-    {
-        return new RedirectResponse('http://127.0.0.1:4200/admin');
-    }
+ 
     /**
      * @Route("/admin/{id}", name="admin_show", methods={"GET"})
      */
@@ -62,7 +51,14 @@ public function __construct(){
                 'email'=>$admin->getEmail(),
                 'roles'=>$admin->getRoles(),
                 'password'=>$admin->getPassword(),
-                'status'=>$admin->getStatus()
+                'adress'=>$admin->getAdress(),
+                'phoneNumber'=>$admin->getPhoneNumber(),
+                'country'=>$admin->getCountry(),
+                'name'=>$admin->getName(),
+                'logo'=>$admin->getLogo(),
+                'city'=>$admin->getCity(),
+                'confirmPassword'=>$admin->getConfirmPassword(),
+                'status'=>$admin->getStatus(),
                 ];
           
         return $this->json($res);
@@ -95,17 +91,24 @@ public function __construct(){
     {
         $admin=$this->getDoctrine()->getRepository(Admin::class)->find($id);
         $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($admin->getEmail());
-        $param=json_decode($request->getContent(),true );
-        $admin->setEmail($param['email']);
-        $admin->setRoles($param['roles']);
-        $admin->setPassword($param['password']);
-        $admin->setStatus($param['status']);
+        $data=json_decode($request->getContent(),true );
+        $admin->setEmail( $data['email']);
+        $admin->setRoles(["ROLE_ADMIN"]);
+        $admin->setName($data['name']);
+        $admin->setAdress($data['adress']);
+        $admin->setPhoneNumber( $data['phoneNumber']);
+        $admin->setCountry($data['country']);
+        $admin->setLogo($data['logo']);
+        $admin->setPassword( $data['password']);
+        $admin->setConfirmPassword($data['confirmPassword']);
+        $admin->setCity( $data['city']);
+        $admin->setStatus($data['status']);
         if( $user==null){
             $user=new  User();
-            if(($param['status']=='Accepted')){
-                $user->setEmail($param['email']);
-                $user->setRoles($param['roles']);
-                $user->setPassword($param['password']);
+            if(($data['status']=='Accepted')){
+                $user->setEmail($data['email']);
+                $user->setRoles($data['roles']);
+                $user->setPassword($data['password']);
                 $entityManager=$this->getDoctrine()->getManager();
                 $entityManager->persist($user);
     
@@ -114,25 +117,23 @@ public function __construct(){
             
         }else{
             $user=$this->getDoctrine()->getRepository(User::class)->findOneByMail($admin->getEmail());
-            if(($param['status']=='Accepted')){
-                $user->setEmail($param['email']);
-                $user->setRoles($param['roles']);
-                $user->setPassword($param['password']);
+            if(($data['status']=='Accepted')){
+                $user->setEmail($data['email']);
+                $user->setRoles($data['roles']);
+                $user->setPassword($data['password']);
                 $entityManager=$this->getDoctrine()->getManager();
                 $entityManager->persist($user);
     
     
             }else{
-                if(($param['status']=='Denied')){
+                if(($data['status']=='Denied')){
             $entityManager=$this->getDoctrine()->getManager();
 
             $entityManager->remove($user);
                 }
             };
             
-            $entityManager=$this->getDoctrine()->getManager();
-
-            $entityManager->remove($user);
+           
 
 
         }
@@ -170,15 +171,22 @@ public function __construct(){
      */
     public function list(): Response
     {
-        $admin=$this->getDoctrine()->getRepository(Admin::class)->findAll();
-        foreach($admin  as  $d)
+        $ad=$this->getDoctrine()->getRepository(Admin::class)->findAll();
+        foreach($ad  as  $admin)
         {
             $res[]=[
-                'id'=>$d->getId(),
-                'email'=>$d->getEmail(),
-                'roles'=>$d->getRoles(),
-                'password'=>$d->getPassword(),
-                'status'=>$d->getStatus()
+                'id'=>$admin->getId(),
+                'email'=>$admin->getEmail(),
+                'roles'=>$admin->getRoles(),
+                'password'=>$admin->getPassword(),
+                'adress'=>$admin->getAdress(),
+                'phoneNumber'=>$admin->getPhoneNumber(),
+                'country'=>$admin->getCountry(),
+                'name'=>$admin->getName(),
+                'logo'=>$admin->getLogo(),
+                'city'=>$admin->getCity(),
+                'confirmPassword'=>$admin->getConfirmPassword(),
+                'status'=>$admin->getStatus(),
                 ];
         }
 
@@ -231,5 +239,36 @@ public function __construct(){
         );
     }
     
+      /**
+     * @Route("/adminEmail/{email}", name="admin_email", methods={"GET"})
+     */
+    public function OneEmail($email): Response
+    {
+        $admin=$this->getDoctrine()->getRepository(Admin::class)->findOneByMail($email);
+        
+        
+            $res[]=[
+                'id'=>$admin->getId(),
+                'email'=>$admin->getEmail(),
+                'roles'=>$admin->getRoles(),
+                'password'=>$admin->getPassword(),
+                'adress'=>$admin->getAdress(),
+                'phoneNumber'=>$admin->getPhoneNumber(),
+                'country'=>$admin->getCountry(),
+                'name'=>$admin->getName(),
+                'logo'=>$admin->getLogo(),
+                'city'=>$admin->getCity(),
+                'confirmPassword'=>$admin->getConfirmPassword(),
+                'status'=>$admin->getStatus(),
+                ];
+        
+        
+       
+        return $this->json(
+            $res
+        );
+    }
+
     
+  
 }

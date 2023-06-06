@@ -37,15 +37,13 @@ class AgentController extends AbstractController
                 'email'=>$agence->getEmail(),
                 'roles'=>$agence->getRoles(),
                 'password'=>$agence->getPassword(),
-                'status'=>$agence->getStatus(),
                 'adress'=>$agence->getAdress(),
                 'phoneNumber'=>$agence->getPhoneNumber(),
                 'country'=>$agence->getCountry(),
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
                 'city'=>$agence->getCity(),
-                'roles'=>$agence->getRoles(),
-                'confirmPaswword'=>$agence->getConfirmPaswword(),
+                'confirmPassword'=>$agence->getConfirmPassword(),
                 'status'=>$agence->getStatus(),
 
 
@@ -173,15 +171,13 @@ class AgentController extends AbstractController
                 'email'=>$agence->getEmail(),
                 'roles'=>$agence->getRoles(),
                 'password'=>$agence->getPassword(),
-                'status'=>$agence->getStatus(),
                 'adress'=>$agence->getAdress(),
                 'phoneNumber'=>$agence->getPhoneNumber(),
                 'country'=>$agence->getCountry(),
                 'name'=>$agence->getName(),
                 'logo'=>$agence->getLogo(),
                 'city'=>$agence->getCity(),
-                'roles'=>$agence->getRoles(),
-                'confirmPaswword'=>$agence->getConfirmPaswword(),
+                'confirmPassword'=>$agence->getConfirmPassword(),
                 'status'=>$agence->getStatus(),
 
                 ];
@@ -194,7 +190,7 @@ class AgentController extends AbstractController
         );
     }
 
-/**
+    /**
      * @Route("/agenceEmail/{email}", name="agence_email", methods={"GET"})
      */
     public function OneEmail($email): Response
