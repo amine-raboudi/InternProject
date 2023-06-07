@@ -35,9 +35,10 @@ class OfferController extends AbstractController
                 'DateEnd' => $offer->getDateEnd(),
                 'Active'=>$offer->isIsActive(),
                 'Category' => $offer->getCategory()->getType(),
+                'images' => $offer->getImages(),
+                'description' => $offer->getDescription(),
+                'Title' => $offer->getTitle(),
                 'Agent' => $offer->getAgent()->getId(),
-
-
                 
             ];
         }
@@ -59,7 +60,9 @@ class OfferController extends AbstractController
     $offer->setPrice($data['price']);
     $offer->setIsActive($data['active']);
 
-
+    $offer->setImages($data['images']);
+    $offer->setDescription($data['description']);
+    $offer->setTitle($data['title']);
     
     // Convert DateStart string to DateTime object
     $offer->setDateStart($data['dateStart']);
@@ -69,7 +72,7 @@ class OfferController extends AbstractController
     $categoryId = $data['category'];
     $category = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
     $offer->setCategory($category);
-    $AgentId = $data['Agent'];
+    $AgentId = $data['agent'];
     $Agent = $this->getDoctrine()->getRepository(Agent::class)->find($AgentId);
     $offer->setAgent($Agent);
     
@@ -87,20 +90,23 @@ class OfferController extends AbstractController
     public function show(Offer $offer,$id): JsonResponse
     {
         $offer =$this->getDoctrine()->getRepository(Offer::class)->find($id);
-  
         if (!$offer) {
   
             return $this->json('No agence found for id' . $id, 404);
         }
   
          $res[]=[
-                'id'=>$offer->getId(),
-                'Price'=>$offer->getPrice(),
-                'DateStart'=>$offer->getDateStart(),
-                'DateEnd'=>$offer->getDateEnd(),
-                'Category'=>$offer->getCategory()->getType(),
-                'Active'=>$offer->isIsActive(),
-                'Agent' => $offer->getAgent()->getId(),
+            'id' => $offer->getId(),
+            'Price' => $offer->getPrice(),
+            'DateStart' => $offer->getDateStart(),
+            'DateEnd' => $offer->getDateEnd(),
+            'Active'=>$offer->isIsActive(),
+            'Category' => $offer->getCategory()->getType(),
+            'images' => $offer->getImages(),
+            'description' => $offer->getDescription(),
+            'Title' => $offer->getTitle(),
+            'Agent' => $offer->getAgent()->getId(),
+
 
                 
                 ];
@@ -117,14 +123,19 @@ public function edit(Request $request, Offer $offer): JsonResponse
     $data = json_decode($request->getContent(), true);
 
     // Update the properties of the offer entity
-    $offer->setPrice($data['Price']);
-    $offer->setIsActive($data['Active']);
+    $offer->setPrice($data['price']);
+    $offer->setIsActive($data['active']);
 
-    $offer->setDateStart($data['DateStart']);
-    $offer->setDateEnd($data['DateEnd']);
+    $offer->setDateStart($data['dateStart']);
+    $offer->setDateEnd($data['dateEnd']);
+    $offer->setImages($data['images']);
+    $offer->setDescription($data['description']);
+    $offer->setTitle($data['title']);
+
+
 
     // Get the category ID from the request data
-    $categoryType = $data['Category'];
+    $categoryType = $data['category'];
 
     // Fetch the category entity based on the ID
     $category1 = $this->getDoctrine()->getRepository(CategoryOffer::class)->findByType($categoryType);
@@ -133,7 +144,7 @@ public function edit(Request $request, Offer $offer): JsonResponse
     $category2 = $this->getDoctrine()->getRepository(CategoryOffer::class)->find($categoryId);
     $offer->setCategory( $category2);
 
-    $AgentId = $data['Agent'];
+    $AgentId = $data['agent'];
     $Agent = $this->getDoctrine()->getRepository(Agent::class)->find($AgentId);
     $offer->setAgent($Agent);
 
@@ -172,7 +183,9 @@ public function delete(Offer $offer): JsonResponse
                 
                 
             ];
-        }
+        }              
+
+
         $cli=[];
         $j=0;
         
@@ -195,7 +208,11 @@ public function delete(Offer $offer): JsonResponse
                 'DateEnd' => $offer->getDateEnd(),
                 'Active'=>$offer->isIsActive(),
                 'Category' => $offer->getCategory()->getType(),
+                'images' => $offer->getImages(),
+                'description' => $offer->getDescription(),
+                'Title' => $offer->getTitle(),
                 'Agent' => $offer->getAgent()->getId(),
+
 
     
                 ];

@@ -54,6 +54,21 @@ class Offer
      */
     private $agent;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Title;
+
+    /**
+     * @ORM\Column(type="string", length=2550)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $images;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
@@ -164,5 +179,41 @@ class Offer
         $this->agent = $agent;
 
         return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->Title;
+    }
+
+    public function setTitle(string $Title): self
+    {
+        $this->Title = $Title;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImages(): ?array
+    {
+        return $this->images;
+
+          }
+
+    public function setImages(?array $images): void
+    {
+        $this->images = $images;
+
     }
 }
